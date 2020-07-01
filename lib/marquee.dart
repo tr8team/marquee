@@ -108,6 +108,7 @@ class Marquee extends StatefulWidget {
     Curve accelerationCurve = Curves.decelerate,
     this.decelerationDuration = Duration.zero,
     Curve decelerationCurve = Curves.decelerate,
+    this.minimumTextWidth = 0.0,
   })  : assert(
             text != null,
             "The text cannot be null. If you don't want to display something, "
@@ -471,6 +472,11 @@ class Marquee extends StatefulWidget {
   /// * [accelerationCurve], the equivalent for decelerating.
   final _IntegralCurve decelerationCurve;
 
+  /// Minimum text width to enable scrolling.
+  /// If text is shorter than this specified width, it will look just like
+  /// a standard Text widget.
+  final double minimumTextWidth;
+
   @override
   State<StatefulWidget> createState() => _MarqueeState();
 
@@ -512,7 +518,13 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   bool _running = false;
   bool _isOnPause = false;
   int _roundCounter = 0;
-  bool get isDone => widget.numberOfRounds == null
+
+  // Text width
+  double _cachedTextWidth;
+
+  bool get isDone => (_cachedTextWidth ?? double.infinity) < widget.minimumTextWidth
+      ? true
+      : widget.numberOfRounds == null
       ? false
       : widget.numberOfRounds == _roundCounter;
   bool get showFading =>
@@ -532,7 +544,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
   Future<bool> _scroll() async {
     await _makeRoundTrip();
-    return _running && !isDone;
+    return _running && !isDone && ();
   }
 
   @override
@@ -657,7 +669,9 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
       extentOffset: TextSpan(text: widget.text).toPlainText().length,
     ));
 
-    return boxes.last.right;
+    final result = boxes.last.right;
+    _cachedTextWidth = result;
+    return result;
   }
 
   @override
