@@ -1,11 +1,11 @@
 name: example
-description: "An example of how to use the Marquee widget."
+description: 'An example of how to use the Marquee widget.'
 version: 1.0.0
-author: Marcel Garus <marcel.garus@gmail.com>
-homepage: https://github.com/marcelgarus/marquee
+publish_to: none
+repository: https://github.com/marcelgarus/marquee
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   flutter:
