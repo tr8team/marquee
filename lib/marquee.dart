@@ -540,7 +540,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   int _roundCounter = 0;
 
   // Text width
-  double _cachedTextWidth;
+  double? _cachedTextWidth;
 
   bool get isDone => (_cachedTextWidth ?? double.infinity) < widget.minimumTextWidth
       ? true
